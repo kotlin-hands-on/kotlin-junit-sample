@@ -8,6 +8,8 @@ A sample project demonstrating how to write tests in Kotlin for Java application
 
 ## Getting Started
 
+![Todo Application Screenshot](misc/img.png)
+
 ### Prerequisites
 
 - Java 17 or higher
