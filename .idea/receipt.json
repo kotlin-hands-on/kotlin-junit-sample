@@ -1,0 +1,10 @@
+{
+  "spec": {
+    "template_id": "kotlin-junit-sample",
+    "parameters": {
+      "utm_source": "jetbrains.com",
+      "utm_medium": "other",
+      "utm_campaign": "c-1"
+    }
+  }
+}
