@@ -1,6 +1,6 @@
 # Kotlin JUnit Sample
 
-Tutorial: [Test code using JUnit in JVM](https://kotlinlang.org/docs/jvm-test-using-junit.htm)
+Tutorial: [Test code using JUnit in JVM](https://kotlinlang.org/docs/jvm-test-using-junit.html)
 
 Configuration guides: [Maven](maven.md) | [Gradle](gradle.md)
 
