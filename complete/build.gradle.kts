@@ -5,7 +5,7 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 plugins {
     application
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version "2.2.21"
 }
 
 kotlin {

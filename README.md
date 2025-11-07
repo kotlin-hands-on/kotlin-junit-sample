@@ -4,7 +4,7 @@ Tutorial: [Test code using JUnit in JVM](https://kotlinlang.org/docs/jvm-test-us
 
 Configuration guides: [Maven](maven.md) | [Gradle](gradle.md)
 
-A sample project demonstrating how to write tests in Kotlin for Java applications. This project shows the migration path from Java tests to Kotlin tests while testing Java source code.
+A sample project demonstrating how to write tests in Kotlin for Java applications. This project shows how to add a Kotlin test for testing Java source code.
 
 ## Getting Started
 
@@ -37,14 +37,14 @@ kotlin-junit-sample/
 ├── initial/          # Starting point with Java tests
 │   ├── src/
 │   │   ├── main/java/    # Java source code
-│   │   └── test/java/    # JUnit tests in Java
+│   │   └── test/java/    # JUnit test in Java
 │   ├── pom.xml           # Maven configuration
 │   └── build.gradle.kts  # Gradle configuration
 │
 └── complete/         # Final version with Kotlin tests
     ├── src/
     │   ├── main/java/    # Same Java source code
-    │   └── test/java/    # JUnit tests in Kotlin
+    │   └── test/java/    # Same JUnit test in Java, new test in Kotlin
     ├── pom.xml           # Maven with Kotlin support
     └── build.gradle.kts  # Gradle with Kotlin plugin
 ```
@@ -52,18 +52,19 @@ kotlin-junit-sample/
 ### Application Code
 
 Both projects contain a simple Todo application with:
-- **TodoItem** - A Java class representing a todo item with title, description, completion status, and timestamps
-- **TodoRepository** - A Java repository class for managing todo items in memory
+
+- **TodoItem** − a Java class representing a todo item with title, description, completion status, and timestamps
+- **TodoRepository** − a Java repository class for managing todo items in memory
 
 ### Test Code
 
-- **initial/**: Contains comprehensive JUnit 5 tests written in Java
-- **complete/**: Same tests converted to Kotlin, demonstrating idiomatic Kotlin testing patterns
+- **initial/**: Contains a JUnit 5 test written in Java for the `TodoItem` class
+- **complete/**: Contains an additional Kotlin test for the `TodoRepository` class, demonstrating idiomatic Kotlin testing patterns
 
 ## Technologies
 
 - **Java**: 17
-- **Kotlin**: 2.2.20 (test code only in complete version)
+- **Kotlin**: 2.2.21 (test code only in the `complete` version)
 - **JUnit**: 5.11.0
 - **Build Tools**: Maven and Gradle (both supported)
 - **UI Library**: Jexer 1.6.0 (terminal UI library)
