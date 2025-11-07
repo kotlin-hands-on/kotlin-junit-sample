@@ -1,19 +1,19 @@
-# Mixing Kotlin and Java in a Maven Project
+# Mixing Kotlin and Java in a Maven project
 
 This guide shows how to configure a Maven project to use both Kotlin and Java together.
 
-## Step 1: Add Kotlin Version Property
+## Step 1: Add Kotlin version property
 
 Add the Kotlin version property to your `pom.xml`:
 
 ```xml
 <properties>
     <!-- ... other properties ... -->
-    <kotlin.version>2.2.20</kotlin.version>
+    <kotlin.version>2.2.21</kotlin.version>
 </properties>
 ```
 
-## Step 2: Add Dependencies
+## Step 2: Add dependencies
 
 Add the required dependencies:
 
@@ -38,107 +38,18 @@ Add the required dependencies:
 </dependencies>
 ```
 
-## Step 3: Configure Kotlin Maven Plugin
+## Step 3: Configure Kotlin Maven plugin
 
-Add the Kotlin Maven plugin configuration to `<pluginManagement>`:
-
-```xml
-<build>
-    <pluginManagement>
-        <plugins>
-            <!-- ... other plugins ... -->
-
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </pluginManagement>
-</build>
-```
-
-## Step 4: Configure Maven Compiler Plugin for Mixed Compilation
-
-Update the Maven Compiler plugin to work with Kotlin. Add this to `<pluginManagement>`:
-
-```xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <version>3.14.0</version>
-    <executions>
-        <!-- Disable default compile phases -->
-        <execution>
-            <id>default-compile</id>
-            <phase>none</phase>
-        </execution>
-        <execution>
-            <id>default-testCompile</id>
-            <phase>none</phase>
-        </execution>
-        <!-- Enable Java compilation after Kotlin -->
-        <execution>
-            <id>java-compile</id>
-            <phase>compile</phase>
-            <goals>
-                <goal>compile</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>java-test-compile</id>
-            <phase>test-compile</phase>
-            <goals>
-                <goal>testCompile</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
-```
-
-**Why this configuration?**
-- Disabling default Maven compiler phases ensures Kotlin compiles first
-- This allows Kotlin code to reference Java code and vice versa
-- The custom execution phases run Java compilation after Kotlin
-
-## Step 5: Activate the Kotlin Plugin
-
-Add the Kotlin plugin to the `<plugins>` section (outside `<pluginManagement>`):
+You only need the Kotlin plugin under `<build><plugins>`. Bind it to the Java compile phases and point it at both Java and Kotlin source roots so code can reference each other both ways.
 
 ```xml
 <build>
     <pluginManagement>
-        <!-- ... -->
+        <!-- No maven-compiler-plugin needed with Kotlin extensions -->
     </pluginManagement>
 
     <plugins>
+        <!-- Activate Kotlin for main and test sources -->
         <plugin>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-maven-plugin</artifactId>
@@ -146,26 +57,23 @@ Add the Kotlin plugin to the `<plugins>` section (outside `<pluginManagement>`):
             <extensions>true</extensions>
             <executions>
                 <execution>
-                    <id>compile</id>
-                    <goals>
-                        <goal>compile</goal>
-                    </goals>
+                    <id>default-compile</id>
+                    <phase>compile</phase>
                     <configuration>
                         <sourceDirs>
-                            <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                            <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                            <sourceDir>src/main/kotlin</sourceDir>
+                            <!-- Ensure Kotlin code can reference Java code -->
+                            <sourceDir>src/main/java</sourceDir>
                         </sourceDirs>
                     </configuration>
                 </execution>
                 <execution>
-                    <id>test-compile</id>
-                    <goals>
-                        <goal>test-compile</goal>
-                    </goals>
+                    <id>default-test-compile</id>
+                    <phase>test-compile</phase>
                     <configuration>
                         <sourceDirs>
-                            <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                            <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                            <sourceDir>src/test/kotlin</sourceDir>
+                            <sourceDir>src/test/java</sourceDir>
                         </sourceDirs>
                     </configuration>
                 </execution>
@@ -175,15 +83,21 @@ Add the Kotlin plugin to the `<plugins>` section (outside `<pluginManagement>`):
 </build>
 ```
 
-## Step 6: Verify Configuration
+**Why this configuration?**
 
-Run your tests to verify the configuration:
+- Keeping `<extensions>true</extensions>` lets Maven wire the Kotlin plugin into the lifecycle seamlessly.
+- This allows Kotlin code to reference Java code and vice versa
+- The custom execution phases allow the Kotlin plugin to successfully compile Kotlin and then Java.
+
+## Step 4: Verify configuration
+
+Run your tests to verify the setup:
 
 ```bash
 ./mvnw clean test
 ```
 
-## Directory Structure
+## Directory structure
 
 With this configuration, you can mix Java and Kotlin files in the same source directories:
 
@@ -199,15 +113,13 @@ src/
 
 The `kotlin-maven-plugin` configuration includes both `src/main/java` and `src/test/java` directories, so you can place `.kt` files alongside `.java` files in the same directories.
 
-## Summary of Changes
+## Summary
 
-1. **Property**: Added `kotlin.version` property
-2. **Dependency**: Added `kotlin-stdlib` with test scope
-3. **Dependency**: Added `junit-jupiter-engine` (required for test runtime)
-4. **Plugin**: Added `kotlin-maven-plugin` configuration
-5. **Plugin**: Modified `maven-compiler-plugin` to disable default phases
-6. **Plugin**: Activated `kotlin-maven-plugin` in `<plugins>` section
+- **Property**: Added `kotlin.version` property
+- **Dependency**: Added `kotlin-stdlib` with test scope and `junit-jupiter-engine` that is required for test runtime
+- **Plugin**: Configured `kotlin-maven-plugin` under `<build><plugins>` section
 
 The configuration ensures that:
+
 - Kotlin compiler runs before Java compiler
 - Both Java and Kotlin code can reference each other
