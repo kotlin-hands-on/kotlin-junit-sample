@@ -9,7 +9,7 @@ Add the Kotlin version property to your `pom.xml`:
 ```xml
 <properties>
     <!-- ... other properties ... -->
-    <kotlin.version>2.2.21</kotlin.version>
+    <kotlin.version>2.3.0</kotlin.version>
 </properties>
 ```
 

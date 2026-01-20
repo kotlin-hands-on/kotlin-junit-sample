@@ -64,7 +64,7 @@ Both projects contain a simple Todo application with:
 ## Technologies
 
 - **Java**: 17
-- **Kotlin**: 2.2.21 (test code only in the `complete` version)
-- **JUnit**: 5.11.0
+- **Kotlin**: 2.3.0 (test code only in the `complete` version)
+- **JUnit**: 6.0.2
 - **Build Tools**: Maven and Gradle (both supported)
 - **UI Library**: Jexer 1.6.0 (terminal UI library)
