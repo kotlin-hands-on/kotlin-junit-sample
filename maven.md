@@ -56,7 +56,6 @@ You only need the Kotlin plugin configuration under `<build><plugins>`:
 
 Enabling `<extensions>true</extensions>` in the Kotlin Maven plugin helps us to:
 
-* Register `src/main/kotlin` and `src/test/kotlin` directories as source roots.
 * Add the `kotlin-stdlib` dependency to the project.
 * Reference Kotlin code in Java code and vice versa.
 * Successfully compile Kotlin and then Java together.
