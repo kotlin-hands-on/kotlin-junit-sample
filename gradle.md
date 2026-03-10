@@ -9,7 +9,7 @@ Add the Kotlin JVM plugin to your `build.gradle.kts` file:
 ```kotlin
 plugins {
     // ... existing plugins ...
-    kotlin("jvm") version "2.3.0"
+    kotlin("jvm") version "2.3.20"
 }
 ```
 
@@ -66,7 +66,7 @@ The Kotlin plugin automatically recognizes both `src/main/java` and `src/test/ja
 
 ## Summary
 
-1. **Plugin**: Added `kotlin("jvm")` plugin with version 2.3.0
+1. **Plugin**: Added `kotlin("jvm")` plugin with version 2.3.20
 2. **Toolchain**: Configured `jvmToolchain(17)` to match the Java version
 3. **Dependency**: Added `kotlin("test")` test dependency
 
