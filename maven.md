@@ -9,13 +9,13 @@ Add the Kotlin version property to your `pom.xml`:
 ```xml
 <properties>
     <!-- ... other properties ... -->
-    <kotlin.version>2.3.0</kotlin.version>
+    <kotlin.version>2.3.20</kotlin.version>
 </properties>
 ```
 
 ## Step 2: Add dependencies
 
-Add the required dependencies:
+Add the JUnit dependency:
 
 ```xml
 <dependencies>
@@ -27,20 +27,12 @@ Add the required dependencies:
         <artifactId>junit-jupiter-engine</artifactId>
         <scope>test</scope>
     </dependency>
-
-    <!-- Kotlin standard library needed to compile/run Kotlin tests -->
-    <dependency>
-        <groupId>org.jetbrains.kotlin</groupId>
-        <artifactId>kotlin-stdlib</artifactId>
-        <version>${kotlin.version}</version>
-        <scope>test</scope>
-    </dependency>
 </dependencies>
 ```
 
 ## Step 3: Configure Kotlin Maven plugin
 
-You only need the Kotlin plugin under `<build><plugins>`. Bind it to the Java compile phases and point it at both Java and Kotlin source roots so code can reference each other both ways.
+You only need the Kotlin plugin configuration under `<build><plugins>`:
 
 ```xml
 <build>
@@ -55,29 +47,6 @@ You only need the Kotlin plugin under `<build><plugins>`. Bind it to the Java co
             <artifactId>kotlin-maven-plugin</artifactId>
             <version>${kotlin.version}</version>
             <extensions>true</extensions>
-            <executions>
-                <execution>
-                    <id>default-compile</id>
-                    <phase>compile</phase>
-                    <configuration>
-                        <sourceDirs>
-                            <sourceDir>src/main/kotlin</sourceDir>
-                            <!-- Ensure Kotlin code can reference Java code -->
-                            <sourceDir>src/main/java</sourceDir>
-                        </sourceDirs>
-                    </configuration>
-                </execution>
-                <execution>
-                    <id>default-test-compile</id>
-                    <phase>test-compile</phase>
-                    <configuration>
-                        <sourceDirs>
-                            <sourceDir>src/test/kotlin</sourceDir>
-                            <sourceDir>src/test/java</sourceDir>
-                        </sourceDirs>
-                    </configuration>
-                </execution>
-            </executions>
         </plugin>
     </plugins>
 </build>
@@ -85,9 +54,11 @@ You only need the Kotlin plugin under `<build><plugins>`. Bind it to the Java co
 
 **Why this configuration?**
 
-- Keeping `<extensions>true</extensions>` lets Maven wire the Kotlin plugin into the lifecycle seamlessly.
-- This allows Kotlin code to reference Java code and vice versa
-- The custom execution phases allow the Kotlin plugin to successfully compile Kotlin and then Java.
+Enabling `<extensions>true</extensions>` in the Kotlin Maven plugin helps us to:
+
+* Add the `kotlin-stdlib` dependency to the project.
+* Reference Kotlin code in Java code and vice versa.
+* Successfully compile Kotlin and then Java together.
 
 ## Step 4: Verify configuration
 
@@ -101,7 +72,7 @@ Run your tests to verify the setup:
 
 With this configuration, you can mix Java and Kotlin files in the same source directories:
 
-```
+```none
 src/
 ├── main/
 │   ├── java/          # Java and Kotlin production code
@@ -111,13 +82,13 @@ src/
     └── kotlin/        # Additional Kotlin test code (optional)
 ```
 
-The `kotlin-maven-plugin` configuration includes both `src/main/java` and `src/test/java` directories, so you can place `.kt` files alongside `.java` files in the same directories.
+The `kotlin-maven-plugin` configuration registers both `src/main/java` and `src/test/java` directories, so you can place `.kt` files alongside `.java` files in the same directories.
 
 ## Summary
 
-- **Property**: Added `kotlin.version` property
-- **Dependency**: Added `kotlin-stdlib` with test scope and `junit-jupiter-engine` that is required for test runtime
-- **Plugin**: Configured `kotlin-maven-plugin` under `<build><plugins>` section
+- **Property**: Added `kotlin.version` property.
+- **Dependency**: Added `junit-jupiter-engine` that is required for test runtime.
+- **Plugin**: Configured `kotlin-maven-plugin` under `<build><plugins>` section.
 
 The configuration ensures that:
 
